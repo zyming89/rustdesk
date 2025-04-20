@@ -191,7 +191,9 @@ impl UI {
     fn get_id(&self) -> String {
         ipc::get_id()
     }
-
+    fn get_local_ip(&self) -> String {
+        ipc::get_local_ip()
+    }
     fn temporary_password(&mut self) -> String {
         temporary_password()
     }
@@ -660,6 +662,7 @@ impl sciter::EventHandler for UI {
         fn is_xfce();
         fn using_public_server();
         fn get_id();
+        fn get_local_ip();
         fn temporary_password();
         fn update_temporary_password();
         fn permanent_password();

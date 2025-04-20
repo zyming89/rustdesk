@@ -1007,6 +1007,31 @@ pub fn get_id() -> String {
         Config::get_id()
     }
 }
+#[derive(Deserialize)]
+struct ResponseBody {
+    data: IpData,
+}
+
+#[derive(Deserialize)]
+struct IpData {
+    ip: String,
+}
+pub fn get_local_ip() -> String {
+    let url: &str = "http://10.6.1.100/api/getIpAddress";
+    let client = reqwest::blocking::Client::new();
+
+    match client.get(url).send() {
+        Ok(response) => match response.json::<ResponseBody>() {
+            Ok(body) => {
+                let ip = body.data.ip;
+                let cleaned_ip = ip.strip_prefix("::ffff:").unwrap_or(&ip);
+                cleaned_ip.to_string()
+            }
+            Err(_) => "".to_string(),
+        },
+        Err(_) => "".to_string(),
+    }
+}
 
 pub async fn get_rendezvous_server(ms_timeout: u64) -> (String, Vec<String>) {
     if let Ok(Some(v)) = get_config_async("rendezvous_server", ms_timeout).await {
