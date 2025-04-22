@@ -774,7 +774,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
         controller: scrollController,
         child: Column(
           children: [
-            _lock(locked, 'Unlock Security Settings', () {
+            _lock(false, 'Unlock Security Settings', () {
               locked = false;
               setState(() => {});
             }),
@@ -1448,7 +1448,7 @@ class _NetworkState extends State<_Network> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     super.build(context);
     return ListView(controller: scrollController, children: [
-      _lock(locked, 'Unlock Network Settings', () {
+      _lock(false, 'Unlock Network Settings', () {
         locked = false;
         setState(() => {});
       }),
