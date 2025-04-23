@@ -464,6 +464,7 @@ class _AddressBookState extends State<AddressBook> {
     var isInProgress = false;
     var passwordVisible = false;
     IDTextEditingController idController = IDTextEditingController(text: '');
+    IPTextEditingController ipController = IPTextEditingController(text: '');
     TextEditingController aliasController = TextEditingController(text: '');
     TextEditingController passwordController = TextEditingController(text: '');
     final tags = List.of(gFFI.abModel.currentAbTags);

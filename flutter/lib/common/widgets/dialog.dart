@@ -288,6 +288,7 @@ Future<String> changeDirectAccessPort(
               Expanded(
                 child: TextField(
                         maxLines: null,
+                        enabled: false,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                             hintText: '21118',
@@ -337,6 +338,7 @@ Future<String> changeAutoDisconnectTimeout(String old) async {
               Expanded(
                 child: TextField(
                         maxLines: null,
+                        enabled: false,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                             hintText: '10',
@@ -414,6 +416,7 @@ class DialogTextField extends StatelessWidget {
           child: Column(
             children: [
               TextField(
+                enabled: false,
                 decoration: InputDecoration(
                   labelText: title,
                   hintText: hintText,

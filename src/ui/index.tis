@@ -29,6 +29,11 @@ function get_id() {
   return my_id;
 }
 
+var my_ip = handler.get_local_ip();
+function get_ip() {
+  my_ip = handler.get_local_ip();
+  return my_ip;
+}
 class ConnectStatus: Reactor.Component {
     function render() {
         return
@@ -570,7 +575,7 @@ class App: Reactor.Component
                         <div .lighter-text>{translate('desk_tip')}</div>
                         <div .your-ipaddress>
                             <div>IP Address </div>                         
-                            {key_confirmed ? <div .address>{handler.get_local_ip()}</div>: translate("Generating ...")}
+                            {key_confirmed ?  <input type="text" .address readonly value={get_ip()}/> : translate("Generating ...")}
                         </div>
                         <div .your-desktop>
                             <MyIdMenu />

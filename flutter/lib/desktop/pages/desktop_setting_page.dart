@@ -465,7 +465,7 @@ class _GeneralState extends State<_General> {
                 serviceBtnEnabled.value = true;
               });
             }();
-          }, enabled: serviceBtnEnabled.value))
+          }, enabled:false)) //enabled: serviceBtnEnabled.value
     ]);
   }
 
@@ -962,7 +962,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
               translate('Full Access'),
               translate('Screen Share'),
             ],
-            enabled: enabled && !isOptionFixed(kOptionAccessMode),
+            enabled: false,
             initialKey: initialKey,
             onChanged: (mode) async {
               await bind.mainSetOption(key: kOptionAccessMode, value: mode);
@@ -1105,7 +1105,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
           final isApproveModeFixed = isOptionFixed(kOptionApproveMode);
           return _Card(title: 'Password', children: [
             ComboBox(
-              enabled: !locked && !isApproveModeFixed,
+              enabled: false, //!locked && !isApproveModeFixed
               keys: modeKeys,
               values: modeValues,
               initialKey: modeInitialKey,

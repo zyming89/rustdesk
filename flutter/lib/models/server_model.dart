@@ -41,6 +41,7 @@ class ServerModel with ChangeNotifier {
 
   late String _emptyIdShow;
   late final IDTextEditingController _serverId;
+  late final IPTextEditingController _serverIp;
   final _serverPasswd =
       TextEditingController(text: translate("Generating ..."));
 
@@ -113,7 +114,7 @@ class ServerModel with ChangeNotifier {
   }
 
   TextEditingController get serverId => _serverId;
-
+  TextEditingController get serverIp => _serverIp;
   TextEditingController get serverPasswd => _serverPasswd;
 
   List<Client> get clients => _clients;
@@ -125,7 +126,7 @@ class ServerModel with ChangeNotifier {
   ServerModel(this.parent) {
     _emptyIdShow = translate("Generating ...");
     _serverId = IDTextEditingController(text: _emptyIdShow);
-
+    _serverIp = IPTextEditingController(text: _emptyIdShow);
     /*
     // initital _hideCm at startup
     final verificationMethod =
@@ -478,6 +479,13 @@ class ServerModel with ChangeNotifier {
     }
   }
 
+  fetchIP() async {
+    final ip = await bind.mainGetMyIp();
+    if (ip != _serverIp.ip) {
+      _serverId.ip = ip;
+      notifyListeners();
+    }
+  }
   changeStatue(String name, bool value) {
     debugPrint("changeStatue value $value");
     switch (name) {

@@ -128,12 +128,16 @@ span.clear-input:hover {
     border-left: color(accent) solid 2px;
     padding-left: 0.5em;
 }
-
-.your-ipaddress .address {
+.your-ipaddress input[type=text] {
     color: #44aeec;
     font-size: 24px;
+    border: none;
     font-weight: 700;
+    padding: 0;
+    border: none;
+    height: 1.5em;
 }
+
 
 .your-desktop {
     border-spacing: 0.5em;

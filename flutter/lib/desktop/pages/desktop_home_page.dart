@@ -90,7 +90,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
         child: loadLogo(),
       ),
       buildTip(context),
-      if (!isOutgoingOnly) buildIDBoard(context),
+      if (!isOutgoingOnly) buildIPBoard(context),
+      if (!isOutgoingOnly) buildIDBoard(context),     
       if (!isOutgoingOnly) buildPasswordBoard(context),
       FutureBuilder<Widget>(
         future: Future.value(
@@ -185,6 +186,75 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       child: ConnectionPage(),
     );
   }
+  
+  buildIPBoard(BuildContext context) {
+    final model = gFFI.serverModel;
+    return Container(
+      margin: const EdgeInsets.only(left: 20, right: 11),
+      height: 57,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        textBaseline: TextBaseline.alphabetic,
+        children: [
+          Container(
+            width: 2,
+            decoration: const BoxDecoration(color: MyTheme.accent),
+          ).marginOnly(top: 5),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 7),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 25,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          translate("IP Address"),
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.color
+                                  ?.withOpacity(0.5)),
+                        ).marginOnly(top: 5),
+                        buildPopupMenu(context)
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    child: GestureDetector(
+                      onDoubleTap: () {
+                        Clipboard.setData(
+                            ClipboardData(text: model.serverId.text));
+                        showToast(translate("Copied"));
+                      },
+                      child: TextFormField(
+                        controller: model.serverIp,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(top: 10, bottom: 10),
+                        ),
+                        style: TextStyle(
+                          fontSize: 22,
+                        ),
+                      ).workaroundFreezeLinuxMint(),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   buildIDBoard(BuildContext context) {
     final model = gFFI.serverModel;
@@ -684,6 +754,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     super.initState();
     _updateTimer = periodic_immediate(const Duration(seconds: 1), () async {
       await gFFI.serverModel.fetchID();
+      await gFFI.serverModel.fetchIP(); // Fetch IP address.
       final error = await bind.mainGetError();
       if (systemError != error) {
         systemError = error;

@@ -8,7 +8,13 @@ class IDTextEditingController extends TextEditingController {
 
   set id(String newID) => text = formatID(newID);
 }
+class IPTextEditingController extends TextEditingController {
+  IPTextEditingController({String? text}) : super(text: text);
 
+  String get ip => value.text;
+
+  set ip(String newIP) => text = newIP;
+}
 class IDTextInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
