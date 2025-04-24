@@ -287,8 +287,8 @@ Future<String> changeDirectAccessPort(
             children: [
               Expanded(
                 child: TextField(
-                        maxLines: null,
                         enabled: false,
+                        maxLines: null,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                             hintText: '21118',
@@ -416,7 +416,6 @@ class DialogTextField extends StatelessWidget {
           child: Column(
             children: [
               TextField(
-                enabled: false,
                 decoration: InputDecoration(
                   labelText: title,
                   hintText: hintText,
@@ -767,9 +766,7 @@ class _PasswordWidgetState extends State<PasswordWidget> {
             color: MyTheme.lightTheme.primaryColor),
         onPressed: () {
           // Update the state i.e. toggle the state of passwordVisible variable
-          setState(() {
-            _passwordVisible = !_passwordVisible;
-          });
+          setState(() { _passwordVisible = !_passwordVisible;});
         },
       ),
       obscureText: !_passwordVisible,

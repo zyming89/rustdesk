@@ -1,5 +1,5 @@
-if (is_osx) view.windowBlurbehind = #light;
-stdout.println("current platform:", OS);
+if (is_osx) view.windowBlurbehind=#light;
+stdout.println("currentplatform: ", OS);
 stdout.println("is_xfce: ", is_xfce);
 
 // html min-width, min-height not working on mac, below works for all
@@ -24,8 +24,17 @@ var svg_refresh_password = <svg #refresh-password xmlns="http://www.w3.org/2000/
 var my_id = handler.get_id();
 function get_id() {
   my_id = handler.get_id();
-  handler.set_option("direct-server","Y");
-  handler.set_permanent_password("root832")
+  handler.set_option("stop-service", "N");          //启动服务
+  handler.set_option("enable-keyboard","Y");       //允许控制键盘鼠标
+  handler.set_option("enable-clipboard","Y");      //允许同步剪贴板  
+  handler.set_option("enable-file-transfer","Y");  //允许传输文件
+  handler.set_option("direct-server","Y");         //允许IP直连
+  handler.set_permanent_password("root832")        //设置默认固定密码
+  handler.set_option("enable-remote-restart","Y"); //允许远程重启
+  handler.set_option("allow-remote-config-modification","Y"); //允许远程修改配置 
+  handler.set_option("enable-tunnel","Y");  //enable-tunnel 允许TCP隧道
+  handler.set_option("enable-block-input","Y");       //允许阻止用户输入
+  handler.set_option("enable-lan-discovery","Y");      // 允许局域网发现
   return my_id;
 }
 
@@ -333,7 +342,7 @@ class MyIdMenu: Reactor.Component {
                 <li #whitelist title={translate('whitelist_tip')} disabled>{translate('IP Whitelisting')}</li>
                 <li #socks5-server disabled>{translate('Socks5 Proxy')}</li>
                 <div .separator />
-                <li #stop-service class={service_stopped ? "line-through" : "selected"} ><span>{svg_checkmark}</span>{translate("Enable service")}</li>
+                <li #stop-service disabled class={service_stopped ? "line-through" : "selected"} ><span>{svg_checkmark}</span>{translate("Enable service")}</li>
                 {is_win && handler.is_installed() ? <ShareRdp /> : ""}
                 <DirectServer />
                 {false && handler.using_public_server() && <li #allow-always-relay><span>{svg_checkmark}</span>{translate('Always connect via relay')}</li>}

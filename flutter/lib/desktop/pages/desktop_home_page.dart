@@ -1008,6 +1008,7 @@ void setPasswordDialog({VoidCallback? notEmptyCallback}) async {
                 Expanded(
                   child: TextField(
                     obscureText: true,
+                    enabled:false,
                     decoration: InputDecoration(
                         labelText: translate('Password'),
                         errorText: errMsg0.isNotEmpty ? errMsg0 : null),
@@ -1037,6 +1038,7 @@ void setPasswordDialog({VoidCallback? notEmptyCallback}) async {
                 Expanded(
                   child: TextField(
                     obscureText: true,
+                    enabled:false,
                     decoration: InputDecoration(
                         labelText: translate('Confirmation'),
                         errorText: errMsg1.isNotEmpty ? errMsg1 : null),

@@ -962,7 +962,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
               translate('Full Access'),
               translate('Screen Share'),
             ],
-            enabled: false,
+            enabled: false, //禁用权限菜单 enabled && !isOptionFixed(kOptionAccessMode
             initialKey: initialKey,
             onChanged: (mode) async {
               await bind.mainSetOption(key: kOptionAccessMode, value: mode);
@@ -1034,25 +1034,26 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
                     value: value,
                     groupValue: currentValue,
                     label: value,
-                    onChanged: locked
-                        ? null
-                        : ((value) async {
-                            callback() async {
-                              await model.setVerificationMethod(
-                                  passwordKeys[passwordValues.indexOf(value)]);
-                              await model.updatePasswordModel();
-                            }
+                    onChanged: null  //禁用选择密码使用方式
+                    // onChanged: locked
+                    //     ? null
+                    //     : ((value) async {
+                    //         callback() async {
+                    //           await model.setVerificationMethod(
+                    //               passwordKeys[passwordValues.indexOf(value)]);
+                    //           await model.updatePasswordModel();
+                    //         }
 
-                            if (value ==
-                                    passwordValues[passwordKeys
-                                        .indexOf(kUsePermanentPassword)] &&
-                                (await bind.mainGetPermanentPassword())
-                                    .isEmpty) {
-                              setPasswordDialog(notEmptyCallback: callback);
-                            } else {
-                              await callback();
-                            }
-                          }),
+                    //         if (value ==
+                    //                 passwordValues[passwordKeys
+                    //                     .indexOf(kUsePermanentPassword)] &&
+                    //             (await bind.mainGetPermanentPassword())
+                    //                 .isEmpty) {
+                    //           setPasswordDialog(notEmptyCallback: callback);
+                    //         } else {
+                    //           await callback();
+                    //         }
+                    //       }),
                   ))
               .toList();
 
@@ -1105,7 +1106,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
           final isApproveModeFixed = isOptionFixed(kOptionApproveMode);
           return _Card(title: 'Password', children: [
             ComboBox(
-              enabled: false, //!locked && !isApproveModeFixed
+              enabled: false, //禁用密码菜单选项 !locked && !isApproveModeFixed
               keys: modeKeys,
               values: modeValues,
               initialKey: modeInitialKey,
@@ -1124,8 +1125,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
                   enabled: tmpEnabled && !locked),
             if (usePassword) radios[1],
             if (usePassword)
-              _SubButton('Set permanent password', setPasswordDialog,
-                  permEnabled && !locked),
+              _SubButton('Set permanent password', setPasswordDialog,false),  // 禁用设置固定密码按钮  permEnabled && !locked
             // if (usePassword)
             //   hide_cm(!locked).marginOnly(left: _kContentHSubMargin - 6),
             if (usePassword) radios[2],
@@ -1134,7 +1134,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
   }
 
   Widget more(BuildContext context) {
-    bool enabled = !locked;
+    bool enabled = false; //  禁用拒绝局域网发现   !locked;
     return _Card(title: 'Security', children: [
       shareRdp(context, enabled),
       _OptionCheckBox(context, 'Deny LAN discovery', 'enable-lan-discovery',
@@ -1183,7 +1183,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
     RxBool applyEnabled = false.obs;
     return [
       _OptionCheckBox(context, 'Enable direct IP access', kOptionDirectServer,
-          update: update, enabled: !locked),
+          update: update, enabled: false), // enabled: !locked 禁用 “允许IP直接访问”的选项
       () {
         // Simple temp wrapper for PR check
         tmpWrapper() {
@@ -1203,7 +1203,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
                   width: 95,
                   child: TextField(
                     controller: controller,
-                    enabled: enabled && !locked && !isOptFixed,
+                    enabled: false,  // 禁用端口输入 ，enabled && !locked && !isOptFixed,
                     onChanged: (_) => applyEnabled.value = true,
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(
@@ -1217,17 +1217,18 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
                   ).workaroundFreezeLinuxMint().marginOnly(right: 15),
                 ),
                 Obx(() => ElevatedButton(
-                      onPressed: applyEnabled.value &&
-                              enabled &&
-                              !locked &&
-                              !isOptFixed
-                          ? () async {
-                              applyEnabled.value = false;
-                              await bind.mainSetOption(
-                                  key: kOptionDirectAccessPort,
-                                  value: controller.text);
-                            }
-                          : null,
+                     onPressed: null,  // 禁用“应用”按钮
+                      // onPressed: applyEnabled.value &&
+                      //         enabled &&
+                      //         !locked &&
+                      //         !isOptFixed
+                      //     ? () async {
+                      //         applyEnabled.value = false;
+                      //         await bind.mainSetOption(
+                      //             key: kOptionDirectAccessPort,
+                      //             value: controller.text);
+                      //       }
+                      //     : null,
                       child: Text(
                         translate('Apply'),
                       ),
@@ -1262,9 +1263,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
           message: translate('whitelist_tip'),
           child: Obx(() => Row(
                 children: [
-                  Checkbox(
-                          value: hasWhitelist.value,
-                          onChanged: enabled && !isOptFixed ? onChanged : null)
+                  Checkbox(value: hasWhitelist.value,onChanged: null)   // 禁用 "ip白名单" 选项， enabled && !isOptFixed ? onChanged : null
                       .marginOnly(right: 5),
                   Offstage(
                     offstage: !hasWhitelist.value,
@@ -1485,7 +1484,7 @@ class _NetworkState extends State<_Network> with AutomaticKeepAliveClientMixin {
                     translate('ID/Relay Server'),
                     style: TextStyle(fontSize: _kContentFontSize),
                   ),
-                  enabled: !locked,
+                  enabled: false, //!locked
                   onTap: () => showServerSettings(gFFI.dialogManager),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -1504,7 +1503,7 @@ class _NetworkState extends State<_Network> with AutomaticKeepAliveClientMixin {
                     translate('Socks5/Http(s) Proxy'),
                     style: TextStyle(fontSize: _kContentFontSize),
                   ),
-                  enabled: !locked,
+                  enabled: false, //!locked
                   onTap: changeSocks5Proxy,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
