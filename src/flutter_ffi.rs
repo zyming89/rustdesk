@@ -1079,6 +1079,9 @@ pub fn main_set_input_source(session_id: SessionID, value: String) {
 pub fn main_get_my_id() -> String {
     get_id()
 }
+pub fn main_get_my_ip() -> String {
+    get_local_ip()
+}
 
 pub fn main_get_uuid() -> String {
     get_uuid()

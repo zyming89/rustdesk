@@ -480,9 +480,9 @@ class ServerModel with ChangeNotifier {
   }
 
   fetchIP() async {
-    final ip = await bind.mainGetMyIp();
+    final ip = await bind.mainGetMyIp(); //新增获取IP的方法
     if (ip != _serverIp.ip) {
-      _serverId.ip = ip;
+      _serverIp.ip = ip;
       notifyListeners();
     }
   }
