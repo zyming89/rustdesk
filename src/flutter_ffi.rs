@@ -1080,7 +1080,7 @@ pub fn main_get_my_id() -> String {
     get_id()
 }
 pub fn main_get_my_ip() -> String {
-    get_local_ip()
+    crate::ipc::get_local_ip()
 }
 
 pub fn main_get_uuid() -> String {
