@@ -189,8 +189,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   
   buildIPBoard(BuildContext context) {
     final model = gFFI.serverModel;
-     print('model内容:',model);
-     print('serverId值: ${model.serverId.text}');
     return Container(
       margin: const EdgeInsets.only(left: 20, right: 11),
       height: 57,
