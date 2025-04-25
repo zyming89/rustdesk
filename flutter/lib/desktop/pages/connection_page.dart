@@ -219,6 +219,19 @@ class _ConnectionPageState extends State<ConnectionPage>
   @override
   void initState() {
     super.initState();
+
+      // 在首帧渲染完成后执行
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!_initialized) {
+        _initialized = true;
+        // 程序启动时自动启动服务
+        await start_service(true);
+        await bind.mainSetOption(key: "direct-server" , value: "Y"); //启动服务后设置直连
+        // 更新界面状态
+        if (mounted) setState(() {});
+      }
+    });
+
     _allPeersLoader.init(setState);
     _idFocusNode.addListener(onFocusChanged);
     if (_idController.text.isEmpty) {

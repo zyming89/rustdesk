@@ -572,13 +572,12 @@ class _PrivilegeBoardState extends State<_PrivilegeBoard> {
       waitDuration: Duration.zero,
       child: Container(
         decoration: BoxDecoration(
-          color: enabled ? MyTheme.accent : Colors.grey[700],
+          color: Colors.grey[700], // enabled ? MyTheme.accent : Colors.grey[700]
           borderRadius: BorderRadius.circular(10.0),
         ),
         padding: EdgeInsets.all(8.0),
         child: InkWell(
-          onTap: () =>
-              checkClickTime(widget.client.id, () => onTap?.call(!enabled)),
+          onTap: null, // Disable the click event,  () => checkClickTime(widget.client.id, () => onTap?.call(!enabled))
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

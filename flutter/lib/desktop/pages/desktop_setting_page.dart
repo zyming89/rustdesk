@@ -951,7 +951,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
       }
 
       return _Card(title: 'Permissions', children: [
-        ComboBox(
+         ComboBox(
             keys: [
               defaultOptionAccessMode,
               'full',
@@ -962,7 +962,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
               translate('Full Access'),
               translate('Screen Share'),
             ],
-            enabled: false, //禁用权限菜单 enabled && !isOptionFixed(kOptionAccessMode
+            enabled:false, //   enabled && !isOptionFixed(kOptionAccessMode)
             initialKey: initialKey,
             onChanged: (mode) async {
               await bind.mainSetOption(key: kOptionAccessMode, value: mode);
@@ -1034,26 +1034,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
                     value: value,
                     groupValue: currentValue,
                     label: value,
-                    onChanged: null  //禁用选择密码使用方式
-                    // onChanged: locked
-                    //     ? null
-                    //     : ((value) async {
-                    //         callback() async {
-                    //           await model.setVerificationMethod(
-                    //               passwordKeys[passwordValues.indexOf(value)]);
-                    //           await model.updatePasswordModel();
-                    //         }
-
-                    //         if (value ==
-                    //                 passwordValues[passwordKeys
-                    //                     .indexOf(kUsePermanentPassword)] &&
-                    //             (await bind.mainGetPermanentPassword())
-                    //                 .isEmpty) {
-                    //           setPasswordDialog(notEmptyCallback: callback);
-                    //         } else {
-                    //           await callback();
-                    //         }
-                    //       }),
+                    onChanged: null  //禁用选择密码使用方式               
                   ))
               .toList();
 
@@ -1203,7 +1184,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
                   width: 95,
                   child: TextField(
                     controller: controller,
-                    enabled: false,  // 禁用端口输入 ，enabled && !locked && !isOptFixed,
+                    enabled: enabled && !locked && !isOptFixed,
                     onChanged: (_) => applyEnabled.value = true,
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(
@@ -1217,18 +1198,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
                   ).workaroundFreezeLinuxMint().marginOnly(right: 15),
                 ),
                 Obx(() => ElevatedButton(
-                     onPressed: null,  // 禁用“应用”按钮
-                      // onPressed: applyEnabled.value &&
-                      //         enabled &&
-                      //         !locked &&
-                      //         !isOptFixed
-                      //     ? () async {
-                      //         applyEnabled.value = false;
-                      //         await bind.mainSetOption(
-                      //             key: kOptionDirectAccessPort,
-                      //             value: controller.text);
-                      //       }
-                      //     : null,
+                      onPressed: null,  // 禁用“应用”按钮
                       child: Text(
                         translate('Apply'),
                       ),
@@ -1245,7 +1215,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
   }
 
   Widget whitelist() {
-    bool enabled = !locked;
+    bool enabled =false;  // 禁用 "ip白名单" 选项，!locked
     // Simple temp wrapper for PR check
     tmpWrapper() {
       RxBool hasWhitelist = whitelistNotEmpty().obs;
@@ -1263,7 +1233,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
           message: translate('whitelist_tip'),
           child: Obx(() => Row(
                 children: [
-                  Checkbox(value: hasWhitelist.value,onChanged: null)   // 禁用 "ip白名单" 选项， enabled && !isOptFixed ? onChanged : null
+                  Checkbox(value: hasWhitelist.value,onChanged: enabled && !isOptFixed ? onChanged : null)   
                       .marginOnly(right: 5),
                   Offstage(
                     offstage: !hasWhitelist.value,
@@ -1275,7 +1245,7 @@ class _SafetyState extends State<_Safety> with AutomaticKeepAliveClientMixin {
                     ),
                   ),
                   Expanded(
-                      child: Text(
+                    child: Text(
                     translate('Use IP Whitelisting'),
                     style:
                         TextStyle(color: disabledTextColor(context, enabled)),

@@ -205,7 +205,7 @@ void changeWhiteList({Function()? callback}) async {
                           errorText: msg.isEmpty ? null : translate(msg),
                         ),
                         controller: controller,
-                        enabled: !isOptFixed,
+                        enabled: false, //禁用白名单输入框 !isOptFixed
                         autofocus: true)
                     .workaroundFreezeLinuxMint(),
               ),
