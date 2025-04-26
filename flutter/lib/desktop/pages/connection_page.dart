@@ -200,8 +200,6 @@ class _ConnectionPageState extends State<ConnectionPage>
     with SingleTickerProviderStateMixin, WindowListener {
   /// Controller for the id input bar.
   final _idController = IDTextEditingController();
- // 添加初始化标志
-  final bool _initialized = false;
   final RxBool _idInputFocused = false.obs;
   final FocusNode _idFocusNode = FocusNode();
   final TextEditingController _idEditingController = TextEditingController();
@@ -209,6 +207,8 @@ class _ConnectionPageState extends State<ConnectionPage>
   String selectedConnectionType = 'Connect';
 
   bool isWindowMinimized = false;
+   // 添加初始化标志
+  bool _initialized = false;
 
   final AllPeersLoader _allPeersLoader = AllPeersLoader();
 
