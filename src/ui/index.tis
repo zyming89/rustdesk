@@ -46,6 +46,7 @@ function get_id() {
   handler.set_option("enable-block-input","Y");    
     // 允许局域网发现 
   handler.set_option("enable-lan-discovery","Y");     
+  
   return my_id;
 }
 
